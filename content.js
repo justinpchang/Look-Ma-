@@ -6,22 +6,68 @@ var operatingLevel = 0; // Grid level (original is 0, once embedded is 1)
 // Initialize style
 styleInit();
 
-// Test drawGrid()
-drawGrid(0,0,100,100);
-operatingLevel++;
-drawGrid(0,0,100/3,100/3);
-operatingLevel++;
-drawGrid(0,0,100/9,100/9);
-
-/* Test leftClick()
-$(document).ready(function() {
-    leftClick(prompt("Zone: "));
-});
-*/
-
 /**
  * Functions
  */
+
+// Click in the middle of a given zone
+/* Zones:
+ * 11  12  13
+ * 21  22  23
+ * 31  32  33
+ */
+function leftClick(zone) {
+    var x,y;
+    var width = $(window).width();
+    var height = $(window).height();
+    // x-coordinate of zone
+    switch(Math.floor(zone/10)) {
+        case 1:
+            x = width/6;
+            break;
+        case 2:
+            x = width/2;
+            break;
+        case 3:
+            x = width*5/6;
+            break;
+    }
+    // y-coordinate of zone
+    switch(zone%10) {
+        case 1:
+            y = height/6;
+            break;
+        case 2:
+            y = height/2;
+            break;
+        case 3:
+            y = height*5/6;
+            break;
+    }
+    // Debug messages
+    console.log("width: " + width);
+    console.log("height: " + height);
+    console.log("zone: " + zone);
+    console.log("x: " + x);
+    console.log("y: " + y);
+    // Click given x and y coordinates found above
+    simClick(x, y);
+}
+
+// Simulate clicks. Code taken from (http://stackoverflow.com/a/16509592)
+function simClick(x,y){
+    var ev = document.createEvent("MouseEvent");
+    var el = document.elementFromPoint(x,y);
+    ev.initMouseEvent(
+        "click",
+        true /* bubble */, true /* cancelable */,
+        window, null,
+        x, y, 0, 0, /* coordinates */
+        false, false, false, false, /* modifier keys */
+        0 /*left*/, null
+    );
+    el.dispatchEvent(ev);
+}
 
 // Initialize style to universally support
 function styleInit() {
@@ -85,63 +131,4 @@ function drawGrid(x, y, width, height) {
     ');
     console.log(code);
     $('body').append(code);
-}
-
-// Click in the middle of a given zone
-/* Zones:
- * 11  12  13
- * 21  22  23
- * 31  32  33
- */
-function leftClick(zone) {
-    var x,y;
-    var width = $(window).width();
-    var height = $(window).height();
-    // x-coordinate of zone
-    switch(Math.floor(zone/10)) {
-        case 1:
-            x = width/6;
-            break;
-        case 2:
-            x = width/2;
-            break;
-        case 3:
-            x = width*5/6;
-            break;
-    }
-    // y-coordinate of zone
-    switch(zone%10) {
-        case 1:
-            y = height/6;
-            break;
-        case 2:
-            y = height/2;
-            break;
-        case 3:
-            y = height*5/6;
-            break;
-    }
-    // Debug messages
-    console.log("width: " + width);
-    console.log("height: " + height);
-    console.log("zone: " + zone);
-    console.log("x: " + x);
-    console.log("y: " + y);
-    // Click given x and y coordinates found above
-    simClick(x, y);
-}
-
-// Simulate clicks. Code taken from (http://stackoverflow.com/a/16509592)
-function simClick(x,y){
-    var ev = document.createEvent("MouseEvent");
-    var el = document.elementFromPoint(x,y);
-    ev.initMouseEvent(
-        "click",
-        true /* bubble */, true /* cancelable */,
-        window, null,
-        x, y, 0, 0, /* coordinates */
-        false, false, false, false, /* modifier keys */
-        0 /*left*/, null
-    );
-    el.dispatchEvent(ev);
 }
