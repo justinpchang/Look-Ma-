@@ -1,47 +1,93 @@
-// Adds HTML for grid
-$('body').append('\
-<style> \
-.vertical_line { \
-    width:3px; \
-    background-color:#F00; \
-    position:fixed; \
-    top:0; \
-    bottom:0; \
-    z-index:1000; \
-} \
-#v1 { \
-    left:33%; \
-} \
-#v2 { \
-    left:67%; \
-} \
-.horizontal_line { \
-    width:100%; \
-    height:3px; \
-    background-color:#F00; \
-    position:fixed; \
-    left:0; \
-    right:0; \
-    z-index:1000; \
-} \
-#h1 { \
-    top:33%; \
-} \
-#h2 { \
-    top:67%; \
-} \
-</style> \
-<div class="vertical_line" id="v1">&nbsp;</div> \
-<div class="vertical_line" id="v2">&nbsp;</div> \
-<div class="horizontal_line" id="h1">&nbsp;</div> \
-<div class="horizontal_line" id="h2">&nbsp;</div> \
-');
+/**
+ * Variables
+ */
+var operatingLevel = 0; // Grid level (original is 0, once embedded is 1)
 
+// Initialize style
+styleInit();
+
+// Test drawGrid()
+drawGrid(0,0,100,100);
+operatingLevel++;
+drawGrid(0,0,100/3,100/3);
+operatingLevel++;
+drawGrid(0,0,100/9,100/9);
+
+/* Test leftClick()
 $(document).ready(function() {
     leftClick(prompt("Zone: "));
 });
+*/
 
-// Function to click in the middle of a given zone
+/**
+ * Functions
+ */
+
+// Initialize style to universally support
+function styleInit() {
+    $('body').append('\
+    <style> \
+    .vertical_line { \
+        width:3px; \
+        background-color:#F00; \
+        position:fixed; \
+        z-index:1000; \
+    } \
+    .horizontal_line { \
+        height:3px; \
+        background-color:#F00; \
+        position:fixed; \
+        z-index:1000; \
+    } \
+    </style> \
+    ');
+}
+
+// Draw grid given top-left coordinates, width, and height (all in %)
+//  NOTE: Always increment operatingLevel before calling this method
+function drawGrid(x, y, width, height) {
+    // Dimension variables
+    var singleWidth = width/3;
+    var singleHeight = height/3;
+    // Full code to add
+    var code = '';
+    // HTML
+    code = code.concat('\
+    <div class="vertical_line" id="v' + operatingLevel + '1">&nbsp;</div> \n\
+    <div class="vertical_line" id="v' + operatingLevel + '2">&nbsp;</div> \n\
+    <div class="horizontal_line" id="h' + operatingLevel + '1">&nbsp;</div> \n\
+    <div class="horizontal_line" id="h' + operatingLevel + '2">&nbsp;</div> \n\
+    ');
+    // CSS
+    code = code.concat('\n\
+    <style> \n\
+    #v' + operatingLevel + '1 { \n\
+        left:' + (x + singleWidth) + '%; \n\
+        top:' + y + '%; \n\
+        bottom:' + (100 - (y + height)) + '%; \n\
+    } \n\
+    #v' + operatingLevel + '2 { \n\
+        left:' + (x + singleWidth * 2) + '%; \n\
+        top:' + y + '%; \n\
+        bottom:' + (100 - (y + height)) + '%; \n\
+    } \n\
+    #h' + operatingLevel + '1 { \n\
+        top:' + (y + singleHeight) + '%; \n\
+        left:' + x + '; \n\
+        right:' + (100 - (x + width)) + '%; \n\
+    } \n\
+    #h' + operatingLevel + '2 { \n\
+        top:' + (y + singleHeight * 2) + '%; \n\
+        left:' + x + '; \n\
+        right:' + (100 - (x + width)) + '%; \n\
+    } \n\
+    </style> \n\
+    ');
+    console.log(code);
+    $('body').append(code);
+}
+
+// Click in the middle of a given zone
 /* Zones:
  * 11  12  13
  * 21  22  23
@@ -85,7 +131,7 @@ function leftClick(zone) {
     simClick(x, y);
 }
 
-// Function to simulate clicks. Code taken from (http://stackoverflow.com/a/16509592)
+// Simulate clicks. Code taken from (http://stackoverflow.com/a/16509592)
 function simClick(x,y){
     var ev = document.createEvent("MouseEvent");
     var el = document.elementFromPoint(x,y);
