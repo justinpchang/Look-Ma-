@@ -37,9 +37,11 @@ $('body').append('\
 <div class="horizontal_line" id="h2">&nbsp;</div> \
 ');
 
-leftClick(prompt("Zone: ", "11"));
+$(document).ready(function() {
+    leftClick(prompt("Zone: "));
+});
 
-// Function click in the middle of a given zone
+// Function to click in the middle of a given zone
 /* Zones:
  * 11  12  13
  * 21  22  23
