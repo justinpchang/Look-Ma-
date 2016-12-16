@@ -1,18 +1,37 @@
 /**
  * Variables
  */
+
 var operatingLevel = 0; // Grid level (original is 0, once embedded is 1)
 var curX,curY; // Need to update curX and curY manually everytime operatingLevel changes
 
 /**
  * Operation
  */
+
 // Initialize style and draw main grid (oL0)
 styleInit();
+
+// Voice recognition
+if (annyang) {
+    // Let's define a command.
+    var commands = {
+        'hey you *data': function(data) { alert(data); },
+        'focus zone *zone': function(zone) { focus(zone); },//focus(convertToZone(zone)); },
+        'left click zone *zone': function(zone) { leftClick(zone); }//leftClick(convertToZone(zone)); },
+    };
+
+    // Add our commands to annyang
+    annyang.addCommands(commands);
+
+    // Start listening.
+    annyang.start();
+}
 
 /**
  * Functions
  */
+
 // Focus on a zone and draw an embedded grid
 function focus(zone) {
     var x = curX;
