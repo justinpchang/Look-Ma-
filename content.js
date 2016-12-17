@@ -64,11 +64,6 @@ function focus(zone) {
     }
     // Draw grid using calculated parameters
     drawGrid(x, y, width, height);
-    console.log("\n\nfocus()");
-    console.log("x: " + x);
-    console.log("y: " + y);
-    console.log("width: " + width);
-    console.log("height: " + height);
 }
 
 // Click in the middle of a given zone
@@ -109,13 +104,6 @@ function leftClick(zone) {
     // Convert percentage to pixels
     x = $(window).width() * x/100;
     y = $(window).height() * y/100;
-    // Debug messages
-    console.log("\n\nleftClick()");
-    console.log("width: " + width);
-    console.log("height: " + height);
-    console.log("zone: " + zone);
-    console.log("x: " + x);
-    console.log("y: " + y);
     // Click given x and y coordinates found above
     simClick(x, y);
 }
