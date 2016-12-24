@@ -1,0 +1,8 @@
+-Un-focus (back)
+-Audio feedback
+-Faster voice recognition
+-Command redundancies
+-URL
+-Back and forwards
+-Insert text
+-Multiple tabs?

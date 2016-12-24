@@ -11,7 +11,6 @@ var curX,curY; // Need to update curX and curY manually everytime operatingLevel
 
 // Initialize style and draw main grid (oL0)
 styleInit();
-focus(11);
 
 // Voice recognition
 if (annyang) {
