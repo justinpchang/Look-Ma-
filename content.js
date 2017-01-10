@@ -3,7 +3,9 @@
  */
 
 var operatingLevel = 0; // Grid level (original is 0, once embedded is 1)
-var curX,curY; // Need to update curX and curY manually everytime operatingLevel changes
+var curX = [];
+var curY = [];
+var grids = [];
 
 /**
  * Operation
@@ -11,6 +13,9 @@ var curX,curY; // Need to update curX and curY manually everytime operatingLevel
 
 // Initialize style and draw main grid (oL0)
 styleInit();
+focus(11);
+focus(12);
+unfocus();
 
 // Voice recognition
 if (annyang) {
@@ -34,8 +39,8 @@ if (annyang) {
 
 // Focus on a zone and draw an embedded grid
 function focus(zone) {
-    var x = curX;
-    var y = curY;
+    var x = curX[curX.length-1];
+    var y = curY[curY.length-1];
     var width = 100/Math.pow(3,operatingLevel);
     var height = width;
     // row
@@ -66,6 +71,15 @@ function focus(zone) {
     drawGrid(x, y, width, height);
 }
 
+// Unfocus 1 level
+function unfocus() {
+    curX.pop();
+    curY.pop();
+    operatingLevel--;
+    grids.pop();
+    displayGrid();
+}
+
 // Click in the middle of a given zone
 /* Zones:
  * 11  12  13
@@ -73,8 +87,8 @@ function focus(zone) {
  * 31  32  33
  */
 function leftClick(zone) {
-    var x = curX;
-    var y = curY;
+    var x = curX[curX.length-1];
+    var y = curY[curY.length-1];
     var width = 100/Math.pow(3,operatingLevel-1);
     var height = width;
     // row
@@ -186,9 +200,16 @@ function drawGrid(x, y, width, height) {
     } \n\
     </style> \n\
     ');
-    $('body').append(code);
+    grids.push(code);
     // Update global variables
-    curX = x;
-    curY = y;
+    curX.push(x);
+    curY.push(y);
     operatingLevel++;
+    displayGrid();
+}
+
+function displayGrid() {
+    for(var i = 0; i < grids.length; i++) {
+        $('body').append(grids[i]);
+    }
 }
